@@ -359,9 +359,6 @@ GetJavaProperties(JNIEnv* env)
         return &sprops;
     }
 
-    /* AWT properties */
-    sprops.awt_toolkit = "sun.awt.windows.WToolkit";
-
     /* tmp dir */
     {
         WCHAR tmpdir[MAX_PATH + 1];
@@ -372,9 +369,6 @@ GetJavaProperties(JNIEnv* env)
 
     /* Printing properties */
     sprops.printerJob = "sun.awt.windows.WPrinterJob";
-
-    /* Java2D properties */
-    sprops.graphics_env = "sun.awt.Win32GraphicsEnvironment";
 
     {    /* This is used only for debugging of font problems. */
         WCHAR *path = _wgetenv(L"JAVA2D_FONTPATH");

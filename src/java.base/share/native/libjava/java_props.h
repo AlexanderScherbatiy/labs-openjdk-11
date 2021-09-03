@@ -75,8 +75,6 @@ typedef struct {
     char *timezone;
 
     char *printerJob;
-    char *graphics_env;
-    char *awt_toolkit;
 
     char *unicode_encoding;     /* The default endianness of unicode
                                     i.e. UnicodeBig or UnicodeLittle   */
@@ -116,8 +114,6 @@ typedef struct {
     char *gopherPort;
 
     char *exceptionList;
-
-    char *awt_headless;  /* java.awt.headless setting, if NULL (default) will not be set */
 #endif
 
 } java_props_t;

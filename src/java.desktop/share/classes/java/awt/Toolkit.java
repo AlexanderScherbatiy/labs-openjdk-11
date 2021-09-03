@@ -78,6 +78,7 @@ import sun.awt.AWTPermissions;
 import sun.awt.AppContext;
 import sun.awt.HeadlessToolkit;
 import sun.awt.PeerEvent;
+import sun.awt.PlatformGraphicsInfo;
 import sun.awt.SunToolkit;
 
 /**
@@ -579,11 +580,32 @@ public abstract class Toolkit {
      */
     public static synchronized Toolkit getDefaultToolkit() {
         if (toolkit == null) {
+            toolkit = getDefaultToolkitFromEnv();
+            if (toolkit != null) {
+                return toolkit;
+            }
+            toolkit = PlatformGraphicsInfo.createToolkit();
+            if (GraphicsEnvironment.isHeadless() &&
+                    !(toolkit instanceof HeadlessToolkit)) {
+                toolkit = new HeadlessToolkit(toolkit);
+            }
+            if (!GraphicsEnvironment.isHeadless()) {
+                loadAssistiveTechnologies();
+            }
+        }
+        return toolkit;
+    }
+
+    private static Toolkit getDefaultToolkitFromEnv() {
+        if (toolkit == null) {
             java.security.AccessController.doPrivileged(
                     new java.security.PrivilegedAction<Void>() {
                 public Void run() {
                     Class<?> cls = null;
                     String nm = System.getProperty("awt.toolkit");
+                    if (nm == null) {
+                        return null;
+                    }
                     try {
                         cls = Class.forName(nm);
                     } catch (ClassNotFoundException e) {

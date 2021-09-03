@@ -206,15 +206,6 @@ Java_java_lang_System_initProperties(JNIEnv *env, jclass cla, jobject props)
                                             JVM_CLASSFILE_MINOR_VERSION);
     PUTPROP(props, "java.class.version", buf);
 
-    if (sprops->awt_toolkit) {
-        PUTPROP(props, "awt.toolkit", sprops->awt_toolkit);
-    }
-#ifdef MACOSX
-    if (sprops->awt_headless) {
-        PUTPROP(props, "java.awt.headless", sprops->awt_headless);
-    }
-#endif
-
     /* os properties */
     PUTPROP(props, "os.name", sprops->os_name);
     PUTPROP(props, "os.version", sprops->os_version);
@@ -320,17 +311,6 @@ Java_java_lang_System_initProperties(JNIEnv *env, jclass cla, jobject props)
                     sprops->patch_level);
 
     /* Java2D properties */
-    /* Note: java.awt.graphicsenv is an implementation private property which
-     * just happens to have a java.* name because it is referenced in
-     * a java.awt class. It is the mechanism by which the implementation
-     * finds the appropriate class in the JRE for the platform.
-     * It is explicitly not designed to be overridden by clients as
-     * a way of replacing the implementation class, and in any case
-     * the mechanism by which the class is loaded is constrained to only
-     * find and load classes that are part of the JRE.
-     * This property may be removed if that mechanism is redesigned
-     */
-    PUTPROP(props, "java.awt.graphicsenv", sprops->graphics_env);
     if (sprops->font_dir != NULL) {
         PUTPROP_ForPlatformNString(props,
                                    "sun.java2d.fontpath", sprops->font_dir);
