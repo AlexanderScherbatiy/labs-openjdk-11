@@ -34,6 +34,8 @@ import java.security.PrivilegedAction;
 
 import sun.security.action.GetPropertyAction;
 
+import sun.awt.PlatformGraphicsInfo;
+
 
 /**
  * Factory class used to retrieve a valid FontManager instance for the current
@@ -48,17 +50,6 @@ public final class FontManagerFactory {
 
     /** Our singleton instance. */
     private static FontManager instance = null;
-
-    private static final String DEFAULT_CLASS;
-    static {
-        if (FontUtilities.isWindows) {
-            DEFAULT_CLASS = "sun.awt.Win32FontManager";
-        } else if (FontUtilities.isMacOSX) {
-            DEFAULT_CLASS = "sun.font.CFontManager";
-            } else {
-            DEFAULT_CLASS = "sun.awt.X11FontManager";
-            }
-    }
 
     /**
      * Get a valid FontManager implementation for the current platform.
@@ -76,8 +67,13 @@ public final class FontManagerFactory {
             public Object run() {
                 try {
                     String fmClassName =
-                            System.getProperty("sun.font.fontmanager",
-                                               DEFAULT_CLASS);
+                            System.getProperty("sun.font.fontmanager");
+
+                    if (fmClassName == null) {
+                        instance = PlatformGraphicsInfo.createFontManager();
+                        return null;
+                    }
+
                     ClassLoader cl = ClassLoader.getSystemClassLoader();
                     Class<?> fmClass = Class.forName(fmClassName, true, cl);
                     instance =
