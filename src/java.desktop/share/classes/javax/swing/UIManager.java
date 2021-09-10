@@ -627,6 +627,9 @@ public class UIManager implements Serializable
         if ("javax.swing.plaf.metal.MetalLookAndFeel".equals(className)) {
             // Avoid reflection for the common case of metal.
             setLookAndFeel(new javax.swing.plaf.metal.MetalLookAndFeel());
+        } else if ("javax.swing.plaf.nimbus.NimbusLookAndFeel".equals(className)) {
+            // Avoid reflection for the common case of nimbus.
+            setLookAndFeel(new javax.swing.plaf.nimbus.NimbusLookAndFeel());
         }
         else {
             Class<?> lnfClass = SwingUtilities.loadSystemClass(className);
