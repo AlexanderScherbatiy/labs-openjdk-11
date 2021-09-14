@@ -28,6 +28,7 @@ package build.tools.generatenimbus;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class SynthModel {
     private UIStyle style;
@@ -79,7 +80,8 @@ public class SynthModel {
         }
     }
 
-    public void write(StringBuilder defBuffer, StringBuilder styleBuffer, String packageName) {
+    public void write(StringBuilder defBuffer, StringBuilder styleBuffer,
+                      Set<String> classesSet, String packageName) {
         defBuffer.append("        //Color palette\n");
         for (UIColor c: colors) defBuffer.append(c.write());
         defBuffer.append('\n');
@@ -99,7 +101,7 @@ public class SynthModel {
         for (UIComponent c: components) {
             String prefix = Utils.escape(c.getKey());
             defBuffer.append("        //Initialize ").append(prefix).append("\n");
-            c.write(defBuffer, styleBuffer, c, prefix, packageName);
+            c.write(defBuffer, styleBuffer, classesSet, c, prefix, packageName);
             defBuffer.append('\n');
         }
     }

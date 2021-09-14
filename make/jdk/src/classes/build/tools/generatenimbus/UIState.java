@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 class UIState {
     private String stateKeys;
@@ -99,17 +100,19 @@ class UIState {
         return cachedName;
     }
 
-    public void write(StringBuilder sb, String prefix, String pkg, String fileNamePrefix, String painterPrefix) {
+    public void write(StringBuilder sb, Set<String> classMapper, String prefix,
+                      String pkg, String fileNamePrefix, String painterPrefix) {
         String statePrefix = prefix + "[" + getName() + "]";
         // write state style
         sb.append(style.write(statePrefix + '.'));
         // write painter
         if (hasCanvas()) {
-            writeLazyPainter(sb, statePrefix, pkg, fileNamePrefix, painterPrefix);
+            writeLazyPainter(sb, classMapper, statePrefix, pkg, fileNamePrefix, painterPrefix);
         }
     }
 
-    private void writeLazyPainter(StringBuilder sb, String statePrefix, String packageNamePrefix, String fileNamePrefix, String painterPrefix) {
+    private void writeLazyPainter(StringBuilder sb, Set<String> classMapper, String statePrefix,
+                                  String packageNamePrefix, String fileNamePrefix, String painterPrefix) {
         String cacheModeString = "AbstractRegionPainter.PaintContext.CacheMode." + style.getCacheMode();
         String stateConstant = Utils.statesToConstantName(painterPrefix + "_" + stateKeys);
         sb.append(String.format(
@@ -119,5 +122,7 @@ class UIState {
                 canvas.getSize().write(false), inverted, cacheModeString,
                 Utils.formatDouble(style.getMaxHozCachedImgScaling()),
                 Utils.formatDouble(style.getMaxVertCachedImgScaling())));
+        classMapper.add(String.format("                    case \"%1$s.%2$s\" : return new %1$s.%2$s(ctx, which);\n",
+                packageNamePrefix, fileNamePrefix));
     }
 }

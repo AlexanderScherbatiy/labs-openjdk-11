@@ -27,6 +27,7 @@ package build.tools.generatenimbus;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import java.util.Set;
 
 class UIIconRegion extends UIRegion {
     private String basicKey;
@@ -51,14 +52,15 @@ class UIIconRegion extends UIRegion {
 
     }
 
-    @Override public void write(StringBuilder sb, StringBuilder styleBuffer, UIComponent comp, String prefix, String pkg) {
+    @Override public void write(StringBuilder sb, StringBuilder styleBuffer, Set<String> classMapper,
+                                UIComponent comp, String prefix, String pkg) {
         Dimension size = null;
         String fileNamePrefix = Utils.normalize(prefix) + "Painter";
         // write states ui defaults
         for (UIState state : backgroundStates) {
             Canvas canvas = state.getCanvas();
             if (!canvas.isBlank()) {
-                state.write(sb, prefix, pkg, fileNamePrefix, getKey());
+                state.write(sb, classMapper, prefix, pkg, fileNamePrefix, getKey());
                 size = canvas.getSize();
             }
         }

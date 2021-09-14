@@ -30,6 +30,7 @@ import javax.xml.stream.XMLStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 class UIRegion {
     String name;
@@ -147,7 +148,7 @@ class UIRegion {
         return false;
     }
 
-    public void write(StringBuilder sb, StringBuilder styleBuffer,
+    public void write(StringBuilder sb, StringBuilder styleBuffer, Set<String> classMapper,
                       UIComponent comp, String prefix, String pkg) {
         // write content margins
         sb.append(String.format("        d.put(\"%s.contentMargins\", %s);\n",
@@ -219,13 +220,13 @@ class UIRegion {
         }
         // write states ui defaults
         for (UIState state : backgroundStates) {
-            state.write(sb, prefix, pkg, fileName, "background");
+            state.write(sb, classMapper, prefix, pkg, fileName, "background");
         }
         for (UIState state : foregroundStates) {
-            state.write(sb, prefix, pkg, fileName, "foreground");
+            state.write(sb, classMapper, prefix, pkg, fileName, "foreground");
         }
         for (UIState state : borderStates) {
-            state.write(sb, prefix, pkg, fileName, "border");
+            state.write(sb, classMapper, prefix, pkg, fileName, "border");
         }
 
         // handle sub regions
@@ -238,7 +239,7 @@ class UIRegion {
             if (subreg instanceof UIComponent) {
                 c = (UIComponent) subreg;
             }
-            subreg.write(sb, styleBuffer, c, p, pkg);
+            subreg.write(sb, styleBuffer, classMapper, c, p, pkg);
         }
     }
 }

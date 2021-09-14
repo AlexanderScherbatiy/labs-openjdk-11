@@ -30,6 +30,9 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.stream.Collectors;
 
 /**
  * Generates the various Java artifacts based on a SynthModel.
@@ -209,11 +212,13 @@ public class Generator {
         //various palettes of the synth model
         StringBuilder defBuffer = new StringBuilder();
         StringBuilder styleBuffer = new StringBuilder();
-        model.write(defBuffer, styleBuffer, packageNamePrefix);
+        Set<String> classMapper = new HashSet<>();
+        model.write(defBuffer, styleBuffer, classMapper, packageNamePrefix);
 
         Map<String, String> vars = getVariables();
         vars.put("UI_DEFAULT_INIT", defBuffer.toString());
         vars.put("STYLE_INIT", styleBuffer.toString());
+        vars.put("CLASS_MAPPER", classMapper.stream().collect(Collectors.joining()));
         writeSrcFile("Defaults", vars, lafName + "Defaults");
     }
 
