@@ -81,7 +81,7 @@ public class SynthModel {
     }
 
     public void write(StringBuilder defBuffer, StringBuilder styleBuffer,
-                      Set<String> classesSet, String packageName) {
+                      Set<String> classMapper, String packageName) {
         defBuffer.append("        //Color palette\n");
         for (UIColor c: colors) defBuffer.append(c.write());
         defBuffer.append('\n');
@@ -101,7 +101,7 @@ public class SynthModel {
         for (UIComponent c: components) {
             String prefix = Utils.escape(c.getKey());
             defBuffer.append("        //Initialize ").append(prefix).append("\n");
-            c.write(defBuffer, styleBuffer, classesSet, c, prefix, packageName);
+            c.write(defBuffer, styleBuffer, classMapper, c, prefix, packageName);
             defBuffer.append('\n');
         }
     }
