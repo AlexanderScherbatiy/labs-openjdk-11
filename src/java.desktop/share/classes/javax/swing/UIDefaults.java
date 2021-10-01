@@ -1534,6 +1534,8 @@ public class UIDefaults extends Hashtable<Object,Object>
                 return javax.swing.plaf.metal.MetalTreeUI.createUI(comp);
             case "javax.swing.plaf.metal.MetalRootPaneUI":
                 return javax.swing.plaf.metal.MetalRootPaneUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalMenuBarUI":
+                return javax.swing.plaf.metal.MetalMenuBarUI.createUI(comp);
             // SynthLookAndFeel
             case "javax.swing.plaf.synth.SynthLookAndFeel":
                 return javax.swing.plaf.synth.SynthLookAndFeel.createUI(comp);
