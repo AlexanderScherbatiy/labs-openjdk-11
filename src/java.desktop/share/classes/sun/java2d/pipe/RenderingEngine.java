@@ -131,12 +131,7 @@ public abstract class RenderingEngine {
             }
         }
         if (reImpl == null) {
-            final String marlinREClass = "sun.java2d.marlin.DMarlinRenderingEngine";
-            try {
-                Class<?> cls = Class.forName(marlinREClass);
-                reImpl = (RenderingEngine) cls.getConstructor().newInstance();
-            } catch (ReflectiveOperationException ignored1) {
-            }
+            reImpl = new sun.java2d.marlin.DMarlinRenderingEngine();
         }
 
         if (reImpl == null) {
