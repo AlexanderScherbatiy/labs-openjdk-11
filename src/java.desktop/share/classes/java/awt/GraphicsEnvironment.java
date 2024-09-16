@@ -31,6 +31,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Locale;
 
+import sun.awt.PlatformGraphicsInfo;
 import sun.font.FontManager;
 import sun.font.FontManagerFactory;
 import sun.java2d.HeadlessGraphicsEnvironment;
@@ -84,15 +85,29 @@ public abstract class GraphicsEnvironment {
 
         /**
          * Creates and returns the GraphicsEnvironment, according to the
-         * system property 'java.awt.graphicsenv'.
+         * platform-specific proxy class.
          *
          * @return the graphics environment
          */
         private static GraphicsEnvironment createGE() {
+            GraphicsEnvironment ge = createGEFromEnv();
+            if (ge != null) {
+                return ge;
+            }
+            ge = PlatformGraphicsInfo.createGE();
+            if (isHeadless()) {
+                ge = new HeadlessGraphicsEnvironment(ge);
+            }
+            return ge;
+        }
+
+        private static GraphicsEnvironment createGEFromEnv() {
             GraphicsEnvironment ge;
             String nm = AccessController.doPrivileged(new GetPropertyAction("java.awt.graphicsenv", null));
+            if (nm == null) {
+                return null;
+            }
             try {
-//              long t0 = System.currentTimeMillis();
                 Class<?> geCls;
                 try {
                     // First we try if the bootstrap class loader finds the
@@ -106,8 +121,6 @@ public abstract class GraphicsEnvironment {
                     geCls = Class.forName(nm, true, cl);
                 }
                 ge = (GraphicsEnvironment)geCls.getConstructor().newInstance();
-//              long t1 = System.currentTimeMillis();
-//              System.out.println("GE creation took " + (t1-t0)+ "ms.");
                 if (isHeadless()) {
                     ge = new HeadlessGraphicsEnvironment(ge);
                 }
@@ -155,8 +168,7 @@ public abstract class GraphicsEnvironment {
             getHeadlessProperty(); // initialize the values
         }
         return defaultHeadless != Boolean.TRUE ? null :
-            "\nNo X11 DISPLAY variable was set, " +
-            "but this program performed an operation which requires it.";
+            PlatformGraphicsInfo.getDefaultHeadlessMessage();
     }
 
     /**
@@ -169,27 +181,8 @@ public abstract class GraphicsEnvironment {
                 String nm = System.getProperty("java.awt.headless");
 
                 if (nm == null) {
-                    /* No need to ask for DISPLAY when run in a browser */
-                    if (System.getProperty("javaplugin.version") != null) {
-                        headless = defaultHeadless = Boolean.FALSE;
-                    } else {
-                        String osName = System.getProperty("os.name");
-                        if (osName.contains("OS X") && "sun.awt.HToolkit".equals(
-                                System.getProperty("awt.toolkit")))
-                        {
-                            headless = defaultHeadless = Boolean.TRUE;
-                        } else {
-                            final String display = System.getenv("DISPLAY");
-                            headless = defaultHeadless =
-                                ("Linux".equals(osName) ||
-                                 "SunOS".equals(osName) ||
-                                 "FreeBSD".equals(osName) ||
-                                 "NetBSD".equals(osName) ||
-                                 "OpenBSD".equals(osName) ||
-                                 "AIX".equals(osName)) &&
-                                 (display == null || display.trim().isEmpty());
-                        }
-                    }
+                    headless = defaultHeadless =
+                            PlatformGraphicsInfo.getDefaultHeadlessProperty();
                 } else {
                     headless = Boolean.valueOf(nm);
                 }

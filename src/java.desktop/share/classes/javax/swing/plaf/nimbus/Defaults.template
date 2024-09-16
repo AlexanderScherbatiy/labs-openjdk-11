@@ -403,6 +403,11 @@ ${UI_DEFAULT_INIT}
                 // See if we should use a separate ClassLoader
                 if (table == null || !((cl = table.get("ClassLoader"))
                                        instanceof ClassLoader)) {
+                    AbstractRegionPainter regionPainter =
+                        createPainter(className, ctx, which);
+                    if (regionPainter != null) {
+                        return regionPainter;
+                    }
                     cl = Thread.currentThread().
                                 getContextClassLoader();
                     if (cl == null) {
@@ -423,6 +428,18 @@ ${UI_DEFAULT_INIT}
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
+            }
+        }
+
+        /**
+        * Map Painter classes to objects to avoid reflection usage
+        */
+        private static AbstractRegionPainter createPainter(
+            String className, AbstractRegionPainter.PaintContext ctx, int which) {
+                switch(className) {
+${CLASS_MAPPER}
+                    default:
+                        return null;
             }
         }
     }

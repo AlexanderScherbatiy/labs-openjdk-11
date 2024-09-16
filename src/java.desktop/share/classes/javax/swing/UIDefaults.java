@@ -781,6 +781,14 @@ public class UIDefaults extends Hashtable<Object,Object>
     public ComponentUI getUI(JComponent target) {
 
         Object cl = get("ClassLoader");
+
+        if (cl == null) {
+            ComponentUI componentUI = createComponentUI(target);
+            if (componentUI != null) {
+                return componentUI;
+            }
+        }
+
         ClassLoader uiClassLoader =
             (cl != null) ? (ClassLoader)cl : target.getClass().getClassLoader();
         Class<? extends ComponentUI> uiClass = getUIClass(target.getUIClassID(), uiClassLoader);
@@ -1385,4 +1393,154 @@ public class UIDefaults extends Hashtable<Object,Object>
         }
     }
 
+    private ComponentUI createComponentUI(JComponent comp) {
+
+        String className = (String)get(comp.getUIClassID());
+
+        if (className == null) {
+            return null;
+        }
+
+        switch (className) {
+            // BasicMetalLookAndFeel
+            case "javax.swing.plaf.basic.BasicButtonUI":
+                return javax.swing.plaf.basic.BasicButtonUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicCheckBoxUI":
+                return javax.swing.plaf.basic.BasicCheckBoxUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicColorChooserUI":
+                return javax.swing.plaf.basic.BasicColorChooserUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicFormattedTextFieldUI":
+                return javax.swing.plaf.basic.BasicFormattedTextFieldUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicMenuBarUI":
+                return javax.swing.plaf.basic.BasicMenuBarUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicMenuUI":
+                return javax.swing.plaf.basic.BasicMenuUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicMenuItemUI":
+                return javax.swing.plaf.basic.BasicMenuItemUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicCheckBoxMenuItemUI":
+                return javax.swing.plaf.basic.BasicCheckBoxMenuItemUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicRadioButtonMenuItemUI":
+                return javax.swing.plaf.basic.BasicRadioButtonMenuItemUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicRadioButtonUI":
+                return javax.swing.plaf.basic.BasicRadioButtonUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicToggleButtonUI":
+                return javax.swing.plaf.basic.BasicToggleButtonUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicPopupMenuUI":
+                return javax.swing.plaf.basic.BasicPopupMenuUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicProgressBarUI":
+                return javax.swing.plaf.basic.BasicProgressBarUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicScrollBarUI":
+                return javax.swing.plaf.basic.BasicScrollBarUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicScrollPaneUI":
+                return javax.swing.plaf.basic.BasicScrollPaneUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicSplitPaneUI":
+                return javax.swing.plaf.basic.BasicSplitPaneUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicSliderUI":
+                return javax.swing.plaf.basic.BasicSliderUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicSeparatorUI":
+                return javax.swing.plaf.basic.BasicSeparatorUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicSpinnerUI":
+                return javax.swing.plaf.basic.BasicSpinnerUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicToolBarSeparatorUI":
+                return javax.swing.plaf.basic.BasicToolBarSeparatorUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicPopupMenuSeparatorUI":
+                return javax.swing.plaf.basic.BasicPopupMenuSeparatorUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicTabbedPaneUI":
+                return javax.swing.plaf.basic.BasicTabbedPaneUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicTextAreaUI":
+                return javax.swing.plaf.basic.BasicTextAreaUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicTextFieldUI":
+                return javax.swing.plaf.basic.BasicTextFieldUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicPasswordFieldUI":
+                return javax.swing.plaf.basic.BasicPasswordFieldUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicTextPaneUI":
+                return javax.swing.plaf.basic.BasicTextPaneUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicEditorPaneUI":
+                return javax.swing.plaf.basic.BasicEditorPaneUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicTreeUI":
+                return javax.swing.plaf.basic.BasicTreeUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicLabelUI":
+                return javax.swing.plaf.basic.BasicLabelUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicListUI":
+                return javax.swing.plaf.basic.BasicListUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicToolBarUI":
+                return javax.swing.plaf.basic.BasicToolBarUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicToolTipUI":
+                return javax.swing.plaf.basic.BasicToolTipUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicComboBoxUI":
+                return javax.swing.plaf.basic.BasicComboBoxUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicTableUI":
+                return javax.swing.plaf.basic.BasicTableUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicTableHeaderUI":
+                return javax.swing.plaf.basic.BasicTableHeaderUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicInternalFrameUI":
+                return javax.swing.plaf.basic.BasicInternalFrameUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicDesktopPaneUI":
+                return javax.swing.plaf.basic.BasicDesktopPaneUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicDesktopIconUI":
+                return javax.swing.plaf.basic.BasicDesktopIconUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicFileChooserUI":
+                return javax.swing.plaf.basic.BasicFileChooserUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicOptionPaneUI":
+                return javax.swing.plaf.basic.BasicOptionPaneUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicPanelUI":
+                return javax.swing.plaf.basic.BasicPanelUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicViewportUI":
+                return javax.swing.plaf.basic.BasicViewportUI.createUI(comp);
+            case "javax.swing.plaf.basic.BasicRootPaneUI":
+                return javax.swing.plaf.basic.BasicRootPaneUI.createUI(comp);
+            // MetalLookAndFeel
+            case "javax.swing.plaf.metal.MetalButtonUI":
+                return javax.swing.plaf.metal.MetalButtonUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalCheckBoxUI":
+                return javax.swing.plaf.metal.MetalCheckBoxUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalComboBoxUI":
+                return javax.swing.plaf.metal.MetalComboBoxUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalDesktopIconUI":
+                return javax.swing.plaf.metal.MetalDesktopIconUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalFileChooserUI":
+                return javax.swing.plaf.metal.MetalFileChooserUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalInternalFrameUI":
+                return javax.swing.plaf.metal.MetalInternalFrameUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalLabelUI":
+                return javax.swing.plaf.metal.MetalLabelUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalPopupMenuSeparatorUI":
+                return javax.swing.plaf.metal.MetalPopupMenuSeparatorUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalProgressBarUI":
+                return javax.swing.plaf.metal.MetalProgressBarUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalRadioButtonUI":
+                return javax.swing.plaf.metal.MetalRadioButtonUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalScrollBarUI":
+                return javax.swing.plaf.metal.MetalScrollBarUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalScrollPaneUI":
+                return javax.swing.plaf.metal.MetalScrollPaneUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalSeparatorUI":
+                return javax.swing.plaf.metal.MetalSeparatorUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalSliderUI":
+                return javax.swing.plaf.metal.MetalSliderUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalSplitPaneUI":
+                return javax.swing.plaf.metal.MetalSplitPaneUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalTabbedPaneUI":
+                return javax.swing.plaf.metal.MetalTabbedPaneUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalTextFieldUI":
+                return javax.swing.plaf.metal.MetalTextFieldUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalToggleButtonUI":
+                return javax.swing.plaf.metal.MetalToggleButtonUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalToolBarUI":
+                return javax.swing.plaf.metal.MetalToolBarUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalToolTipUI":
+                return javax.swing.plaf.metal.MetalToolTipUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalTreeUI":
+                return javax.swing.plaf.metal.MetalTreeUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalRootPaneUI":
+                return javax.swing.plaf.metal.MetalRootPaneUI.createUI(comp);
+            case "javax.swing.plaf.metal.MetalMenuBarUI":
+                return javax.swing.plaf.metal.MetalMenuBarUI.createUI(comp);
+            // SynthLookAndFeel
+            case "javax.swing.plaf.synth.SynthLookAndFeel":
+                return javax.swing.plaf.synth.SynthLookAndFeel.createUI(comp);
+            default:
+                return null;
+        }
+    }
 }
